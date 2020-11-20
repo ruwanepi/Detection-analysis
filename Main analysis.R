@@ -225,9 +225,12 @@ confint(lm_log.model)
 (1-(exp(-0.1010914)))*100
 (1-(exp(-0.005190563)))*100
 
+(exp(coef(lm_log.model)["Year"])-1)*100
+(exp(-0.1010914)-1)*100
+(exp(-0.005190563)-1)*100
+
 ##For every one-unit increase in year, delay to response 
 ##decreases by 5.18% (95% CI 0.5-9.6). 
-##This equates to 57.0% over 11 years (2008-2019)
 
 
 ###################################################################################
@@ -370,6 +373,10 @@ confint(lm_log.model_pres)
 (1-exp(-0.05551829))*100
 (1-exp(0.01779795))*100
 
+(exp(coef(lm_log.model_pres)["Year"])-1)*100
+(exp(-0.05551829)-1)*100
+(exp(0.01779795)-1)*100
+
 #DOS to DOD
 76-(sum(is.na(Cholera_outbreaks_2008_2019$Delay_symp_det)))
 summary(lm_log.model_det <- lm(log1p(Delay_symp_det) ~ Year, data = Cholera_outbreaks_2008_2019))
@@ -379,6 +386,10 @@ plot(lm_log.model_det, las = 1)
 confint(lm_log.model_det)
 (1-exp(-0.08846064))*100
 (1-exp(-0.006914679))*100
+
+(exp(coef(lm_log.model_det)["Year"])-1)*100
+(exp(-0.08846064)-1)*100
+(exp(-0.006914679)-1)*100
 
 #DOS to DOI
 76-(sum(is.na(Cholera_outbreaks_2008_2019$Delay_symp_inv)))
@@ -390,6 +401,10 @@ confint(lm_log.model_inv)
 (1-exp(-0.1729821))*100
 (1-exp(-0.02498092))*100
 
+(exp(coef(lm_log.model_inv)["Year"])-1)*100
+(exp(-0.1729821)-1)*100
+(exp(-0.02498092)-1)*100
+
 #DOS to DOC
 76-(sum(is.na(Cholera_outbreaks_2008_2019$Delay_symp_conf)))
 summary(lm_log.model_conf <- lm(log1p(Delay_symp_conf) ~ Year, data = Cholera_outbreaks_2008_2019))
@@ -399,6 +414,11 @@ plot(lm_log.model_conf, las = 1)
 confint(lm_log.model_conf)
 (1-exp(-0.1755834))*100
 (1-exp(-0.0256475))*100
+
+(exp(coef(lm_log.model_conf)["Year"])-1)*100
+(exp(-0.1755834)-1)*100
+(exp(-0.0256475)-1)*100
+
 
 
 #ANNEX 4: Graphs
@@ -460,9 +480,16 @@ summary(model2 <- lm(log1p(Delay_symp_resp) ~ Alert_bin_F, data = Cholera_outbre
 confint(model2)
 opar <- par(mfrow = c(2,2), oma = c(0, 0, 1.1, 0))
 plot(model2, las = 1)
-(1-(exp(-0.5148)))*100
+(1-(exp(coef(model2))))*100
 confint(model2)
 (1-(exp(-0.9413772)))*100
 (1-(exp(-0.05841244)))*100
+
+(exp(coef(model2))-1)*100
+(exp(-0.9413772)-1)*100
+(exp(-0.05841244)-1)*100
+
 ##For every one-unit increase in alert-status, delay to response 
-##decreases by 40.2% (95% CI 7.2-61.5).
+##decreases by 39.3% (95% CI 5.7-61.0).
+
+

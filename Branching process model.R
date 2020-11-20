@@ -300,3 +300,4 @@ print(total_cases_30.range <- range(total_cases_30))
 lsm_30=log(total_cases_30.median)-(1/2)*log((total_cases_30.sd/total_cases_30.median)^2+1)
 lssd_30=sqrt(log((total_cases_30.sd/total_cases_30.median)^2+1))
 plnorm(20, lsm_30, lssd_30)
+
