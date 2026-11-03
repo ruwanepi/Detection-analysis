@@ -62,6 +62,7 @@ for(i in 1:runs) {
                                      scale=(1/SIrate)))
     }
     cases <- length(t.new) & cases<cap_cases
+    
     t <- t.new
     times <- c(times[times<=5],t.new)
   }

@@ -19,6 +19,7 @@ library(lmtest)
 library(e1071)
 library(cowplot)
 library(scales)
+library(viridis)
 
 
 ####################
@@ -89,6 +90,8 @@ print(Cholera_outbreaks_2008_2019 %>%
 ## (B) outbreak detection, (C) investigation, (D) response, and (E) confirmation
 ################################################################################
 
+tiff("fig_aadd_file_3.tiff", units="in", width=8.3, height=5.9, res=300)
+
 #Histograms for Annex
 p1 <-ggplot(Cholera_outbreaks_2008_2019, aes(x=Delay_symp_pres)) +
   geom_histogram(binwidth=1, color="blue", fill="grey") +
@@ -132,10 +135,14 @@ p5 <-ggplot(Cholera_outbreaks_2008_2019, aes(x=Delay_symp_conf)) +
 
 plot_grid(p1, p2, NULL, p3, p4, p5, labels = c('A', 'B', ' ', 'C', 'D', 'E'), label_size = 12, label_colour = "blue")
 
+dev.off()
+
 
 ################################################################
 ## FIGURE 1: Graph of median delays and intervals by country
 ################################################################
+
+tiff("fig1.tiff", units="in", width=8.3, height=11.7, res=300)
 
 Outbreaks <- Cholera_outbreaks_2008_2019 %>%
   select(Outbreak, Year, Region, Delay_symp_pres, Delay_symp_det, 
@@ -180,6 +187,9 @@ ggplot(Outbreaks %>% filter(!is.na(Delay_symp_resp)),
     panel.grid.major.y = element_blank(), 
     panel.grid.major.x = element_blank()) + 
   coord_flip()
+
+dev.off()
+
 
 
 ################################################################
@@ -237,6 +247,8 @@ confint(lm_log.model)
 ## FIGURE 2: Scatterplots of delays from symptom onset to (A) case presentation
 ## (B) outbreak detection, (C) investigation, (D) response, and (E) confirmation
 ###################################################################################
+
+tiff("fig2.tiff", units="in", width=8.3, height=5.9, res=300)
 
 #Fit regression line and a non-parametric smoother (Loess curve)
 Cholera_outbreaks_2008_2019$Date_onset_eff <- as.Date(Cholera_outbreaks_2008_2019$Date_onset_eff)
@@ -318,10 +330,13 @@ plot_grid(A + theme(legend.position="top"), B + theme(legend.position="top"),
           labels = c('A', 'B', ' ', 'C', 'D', 'E'), 
           label_size = 12, label_colour = "blue", align = "vh")
 
+dev.off()
 
 ###################################################
 ## FIGURE 3: Boxplot for alert vs data analysis
 ###################################################
+
+tiff("fig3.tiff", units="in", width=8.1, height=5.9, res=300)
 
 clean<- na.omit(subset(Cholera_outbreaks_2008_2019, select = c(Alert, Delay_symp_resp)))
 g <- ggplot(clean, aes(Alert, Delay_symp_resp))
@@ -331,7 +346,7 @@ g + geom_boxplot(width=0.5/length(unique(Cholera_outbreaks_2008_2019$Alert)),
     axis.line.y  = element_blank(),
     axis.title.x = element_blank(),
     axis.ticks.x = element_blank(),
-    text = element_text(size=30),
+    text = element_text(size=20),
     panel.background = element_rect(fill = "transparent"),
     panel.border = element_rect(colour = "black", fill=NA, size=.1),
     panel.grid.minor.x=element_blank(),
@@ -346,6 +361,7 @@ g + geom_boxplot(width=0.5/length(unique(Cholera_outbreaks_2008_2019$Alert)),
                alpha=0.6,
                colour="grey")
 
+dev.off()
 
 ########################################################
 ## ANNEX 4: Change in time to event for other delays
