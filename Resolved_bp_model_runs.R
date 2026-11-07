@@ -14,12 +14,11 @@
 ####################
 library(fitdistrplus)
 library(viridis)
-library(tidyverse)
 
 ################
 # 1 - Parameters  
 ################
-SI <- 5 # Kahn (2019): the serial interval for cholera was assumed to follow
+SI <- 5 # Kahn (2019): the median serial interval for cholera was assumed to follow
 SIrate <- 0.1 # a gamma distribution (rate = 0.1, shape = 0.5)
 SIshape <- 0.5 # with a median serial interval of 5 days
 
@@ -29,7 +28,7 @@ R <- 2.5 # Effective reproduction number in early phase (From: Azman, 2015)
 ## R_E_unvaccinated = 2.2-2.4 and R_E_vaccinated = 1.5-1.9 in South Sudan
 
 k <- 4.5 # Dispersion parameter k is set to 4.5 
-# (Moore 2014; used range from 0.0039 to 22028)
+# (Moore 2014; used range from 0.0039 to 22028; alternately, use k = 1.0 and 1.5)
 cap_cases <- 1000
 
 
@@ -39,8 +38,8 @@ cap_cases <- 1000
 
 set.seed(645)
 runs <- 10000
-seed <- 20 # Branching process model using seed cases. Repeat for 10 and 20 seed cases
-d <- 30 # Delay under investigation
+seed <- 3 # Adjust the number of seed cases (3, 10, 20)
+d <- 5 # Adjust the delay under investigation (5, 7, 10, 11, 14, 21, 30)
 
 #############################
 # 3 - Branching process model
@@ -64,8 +63,7 @@ for(i in 1:runs) {
     (secondary <- rnbinom(cases,size=k,mu=R))
     t.new <- numeric()
     for(j in 1:length(secondary)) {
-      t.new <- c(t.new,t[j] + rgamma(secondary[j],shape=SIshape[1],
-                                     scale=(1/SIrate)))
+      t.new <- c(t.new,t[j] + rgamma(secondary[j],shape=SIshape, rate=SIrate))
     }
     if(length(times) + length(t.new) >= cap_cases) {
       break}
@@ -84,8 +82,7 @@ for(i in 1:runs) {
 print(total_cases.median <- median(total_cases$cases))
 print(total_cases.sd <- sd(total_cases$cases))
 print(total_cases.range <- range(total_cases$cases))
-
-# calculate the number of outbreaks <20 cases  
+# calculate the number of outbreaks <20 cases
 total_cases %>% group_by(cases < 20) %>% summarize(n = n()) %>% mutate(freq = n / sum(n)*100) 
 # identify whether any runs violate the cap to make sure capping code is working
 max(total_cases$cases)
