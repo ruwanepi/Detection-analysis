@@ -1,13 +1,13 @@
-#######################################################################
+###########################################################################
 ## This code describes a branching process model for cholera outbreaks
 ## during an early growth phase
 ## Submission: BMC Medicine <title: Early detection of cholera epidemics 
 ## to support control in fragile and conflict-affected states: estimated 
 ## delays and potential epidemic sizes>
 ## Author: Ruwan Ratnayake, October 2020
-## Code adapted from Althaus et al 2015 
-## <doi:10.1016/S1473-3099(15)70135-0>
-#######################################################################
+## Code adapted from Althaus et al 2015 <doi:10.1016/S1473-3099(15)70135-0>
+## **Note that this code was corrected due to a coding error in Nov 2026
+###########################################################################
 
 ####################
 # 0 - Load libraries
@@ -65,6 +65,8 @@ for(i in 1:runs) {
     for(j in 1:length(secondary)) {
       t.new <- c(t.new,t[j] + rgamma(secondary[j],shape=SIshape, rate=SIrate))
     }
+    # This line corrects the coding error which erroneously reset the number 
+    ## of secondary cases.
     if(length(times) + length(t.new) >= cap_cases) {
       break}
     cases <- length(t.new)
